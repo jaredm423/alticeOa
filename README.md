@@ -1,16 +1,67 @@
-# React + Vite
+# Movie App 🎬
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A full-stack demo application with:
 
-Currently, two official plugins are available:
+- **Frontend:** React + Vite
+- **Backend:** Spring Boot (Java)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+The app shows trending movies (via TMDB API) with a custom UI, error handling, and caching.  
+You can browse movies in the frontend, and the backend serves API endpoints and business logic.
 
-## React Compiler
+A note about secrets:
+At my previous role, we would set ENV vars on our AWS EC2s and have our application.yml read from these ENV vars.
+I felt that it was inconvenient for someone to have to configure ENV vars to be able to run my application locally.
+I've resorted to putting my application.yml with keys in .gitignore and having the user simply copy that file into the project to run.
+At some point, to run locally, you need to see the secrets, if this was a hosted application, secrets would be a different story.
+So, for the sake of being quick and convenient this is what I've chosen to do.
 
-The React Compiler is not enabled on this template. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## 📦 Prerequisites
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Make sure you have installed:
+
+- **Node.js** (>= 18.x recommended)
+- **npm**
+- **Java** (>= 17)
+- **Maven** (if not using Spring Boot wrapper)
+
+---
+
+## Application.yml template:
+
+server:
+  port: 8080
+
+tmdb:
+  v4Token: <your token>
+  v3Key: <your key>
+
+---
+
+## 🚀 Running the Backend (Spring Boot)
+0. Configure secrets!
+    Add your api v4token and v3key from tmdb into the application.yml under tmdb
+    Next the application.yml file into the resources folder under:
+        alticeOA/movie-list/api/movie-api/src/main/resources
+
+1. Navigate to the backend directory:
+   cd alticeOA/movie-list/api/movie-api
+   mvn spring-boot:run
+   Should start nicely :D
+
+2. Run tests!
+    in /movie-api directory, run:
+        mvn test
+
+## 🚀 Running the Frontend (React + Vite)
+
+1. Navigate to the frontend directory:
+   cd alticeOA/movie-list/ui
+   npm install
+   npm run dev --> this starts the dev server on port 5173
+   check http://localhost:5173 in your browser to ensure the application is running properly
+
+2. Run test!
+    in /ui directory, run:
+        npm run test
