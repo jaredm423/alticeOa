@@ -1,4 +1,3 @@
-// ui/src/__tests__/MovieCard.test.jsx
 import { describe, it, expect, vi } from 'vitest'
 import React from 'react'
 import MovieCard from '../components/MovieCard.jsx'
@@ -14,11 +13,11 @@ describe('<MovieCard />', () => {
 
         const link = container.querySelector('a')
         const img = container.querySelector('img')
-        const titleEl = container.querySelector('.title') || container.querySelector('div:last-child')
+        const title = container.querySelector('.title') || container.querySelector('div:last-child')
 
         expect(link.getAttribute('href')).toBe('/movie/123')
         expect(img.getAttribute('src')).toBe('https://img/x.jpg')
-        expect(titleEl.textContent).toMatch(/Inception/)
+        expect(title.textContent).toMatch(/Inception/)
 
         await unmount()
     })

@@ -10,6 +10,7 @@ export default function FavoriteButton({ movie }) {
     <button
       type="button"
       className={`${styles.favBtn} ${fav ? styles.active : ''}`}
+      data-testid="fav"
       aria-pressed={fav ? 'true' : 'false'}
       aria-label={fav ? 'Remove from favorites' : 'Add to favorites'}
       onClick={(e) => { e.preventDefault(); toggleFavorite(movie); }}

@@ -12,7 +12,6 @@ export function loadFavorites() {
     }
 }
 
-/** Save minimal movie records (array). */
 export function saveFavorites(list) {
     try {
         localStorage.setItem(KEY, JSON.stringify(list));

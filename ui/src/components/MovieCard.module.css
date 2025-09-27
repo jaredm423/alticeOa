@@ -38,9 +38,8 @@
   gap: var(--space-2);
 }
 
-.title {
-  font-size: var(--fs-md);
-  line-height: 1.35;
+:global(.title).title {
+  font-size: 1.2rem;
 }
 
 .title a {

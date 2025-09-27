@@ -9,7 +9,6 @@ vi.mock('../api.js', () => ({
     tmdbImage: (p) => `https://img${p}`
 }))
 
-// tiny waitUntil helper so we don't rely on exact timing
 async function waitUntil(check, { tries = 10 } = {}) {
     for (let i = 0; i < tries; i++) {
         if (check()) return true

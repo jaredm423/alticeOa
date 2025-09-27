@@ -1,4 +1,3 @@
-// ui/src/__tests__/FavoritesContext.test.jsx
 import { describe, it, expect, beforeEach } from 'vitest'
 import React from 'react'
 import { FavoritesProvider, useFavorites } from '../favorites/FavoritesContext.jsx'
