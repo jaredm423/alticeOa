@@ -1,0 +1,54 @@
+.container {
+    max-width: 900px;
+    margin: 24px auto;
+    padding: 0 12px;
+}
+
+.row {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.title {
+    margin: 0;
+}
+
+.limit {
+    margin-left: auto;
+    font-size: 14px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 12px;
+}
+
+.tabs {
+    display: flex;
+    gap: 8px;
+}
+
+.tab {
+    border: 1px solid #e5e7eb;
+    border-radius: 999px;
+    padding: 6px 12px;
+    background: #fff;
+    cursor: pointer;
+}
+
+.tab.active {
+    background: #111;
+    color: #fff;
+    border-color: #111;
+}
+
+.pad {
+    padding: 16px;
+}
+
+.error {
+    color: crimson;
+}

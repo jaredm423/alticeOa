@@ -8,11 +8,19 @@ import reactor.core.publisher.Mono;
 @RequestMapping("/api")
 public class MovieController {
   private final MovieService service;
-  public MovieController(MovieService service) { this.service = service; }
 
-  @GetMapping(value="/trending", produces=MediaType.APPLICATION_JSON_VALUE)
-  public Mono<String> trending(@RequestParam(defaultValue="day") String window,
-                               @RequestParam(defaultValue="10") int limit) {
+  public MovieController(MovieService service) {
+    this.service = service;
+  }
+
+  @GetMapping(value = "/trending", produces = MediaType.APPLICATION_JSON_VALUE)
+  public Mono<String> trending(@RequestParam(defaultValue = "day") String window,
+      @RequestParam(defaultValue = "10") int limit) {
     return service.getTrending(window, limit);
+  }
+
+  @GetMapping(value = "/movie/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+  public Mono<String> details(@PathVariable long id) {
+    return service.getDetails(id);
   }
 }

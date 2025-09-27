@@ -15,10 +15,9 @@ public class TmdbClient {
 
   public TmdbClient(
       @Value("${tmdb.v4Token:}") String v4Token,
-      @Value("${tmdb.v3Key:}")   String v3Key
-  ) {
+      @Value("${tmdb.v3Key:}") String v3Key) {
     this.v4Token = v4Token == null ? "" : v4Token.trim();
-    this.v3Key   = v3Key   == null ? "" : v3Key.trim();
+    this.v3Key = v3Key == null ? "" : v3Key.trim();
 
     var b = WebClient.builder().baseUrl("https://api.themoviedb.org/3");
     if (!this.v4Token.isEmpty()) {
@@ -28,18 +27,31 @@ public class TmdbClient {
 
     // debug (no secret printed)
     System.out.println("[TMDB] v4 present? " + !this.v4Token.isEmpty() +
-                       " | v3 present? " + !this.v3Key.isEmpty());
+        " | v3 present? " + !this.v3Key.isEmpty());
   }
 
   public Mono<String> trending(String window) {
     String uri = "/trending/movie/" + window;
     if (v4Token.isEmpty() && !v3Key.isEmpty()) {
-      uri += "?api_key=" + v3Key;  // V3 fallback
+      uri += "?api_key=" + v3Key; // V3 fallback
     }
     return client.get().uri(uri)
-      .retrieve()
-      .onStatus(s -> s.is4xxClientError() || s.is5xxServerError(),
-        resp -> resp.createException()) // bubble WebClientResponseException
-      .bodyToMono(String.class);
+        .retrieve()
+        .onStatus(s -> s.is4xxClientError() || s.is5xxServerError(),
+            resp -> resp.createException()) // bubble WebClientResponseException
+        .bodyToMono(String.class);
+  }
+
+  public Mono<String> details(long id) {
+    // include richer data so the UI can show more without extra calls
+    String q = "append_to_response=videos,credits,images&include_image_language=en,null";
+    String uri = "/movie/" + id + "?" + q;
+    if (v4Token.isEmpty() && !v3Key.isEmpty()) {
+      uri += "&api_key=" + v3Key; // v3 fallback
+    }
+    return client.get().uri(uri)
+        .retrieve()
+        .onStatus(s -> s.is4xxClientError() || s.is5xxServerError(), resp -> resp.createException())
+        .bodyToMono(String.class);
   }
 }
