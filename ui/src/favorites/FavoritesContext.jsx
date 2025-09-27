@@ -1,13 +1,11 @@
 import React, { createContext, useContext, useMemo, useState, useCallback } from 'react';
 import { loadFavorites, saveFavorites } from './storage';
 
-/** Minimal record we persist */
 const pick = (m) => ({ id: m.id, title: m.title ?? m.name ?? '', poster_path: m.poster_path ?? '' });
 
 const FavoritesCtx = createContext(null);
 
 export function FavoritesProvider({ children }) {
-    // hydrate from localStorage once
     const initial = loadFavorites();
     const [byId, setById] = useState(() => {
         const map = new Map();
@@ -25,13 +23,22 @@ export function FavoritesProvider({ children }) {
             const next = new Map(prev);
             if (next.has(id)) next.delete(id);
             else next.set(id, pick(movie));
-            // persist
             saveFavorites(Array.from(next.values()));
             return next;
         });
     }, []);
 
-    const value = useMemo(() => ({ favorites, isFavorite, toggleFavorite }), [favorites, isFavorite, toggleFavorite]);
+    const clearFavorites = useCallback(() => {
+        setById(() => {
+            saveFavorites([]);
+            return new Map();
+        });
+    }, []);
+
+    const value = useMemo(
+        () => ({ favorites, isFavorite, toggleFavorite, clearFavorites }),
+        [favorites, isFavorite, toggleFavorite, clearFavorites]
+    );
 
     return <FavoritesCtx.Provider value={value}>{children}</FavoritesCtx.Provider>;
 }

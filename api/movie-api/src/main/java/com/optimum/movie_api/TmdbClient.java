@@ -1,12 +1,17 @@
 package com.optimum.movie_api;
 
+import java.time.Duration;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
+import reactor.util.retry.Retry;
 
 @Slf4j
 @Component
@@ -38,13 +43,21 @@ public class TmdbClient {
 
     return client.get().uri(uri)
         .retrieve()
-        .onStatus(s -> s.is4xxClientError() || s.is5xxServerError(),
-            resp -> resp.createException()) // bubble WebClientResponseException
-        .bodyToMono(String.class);
+        .onStatus(HttpStatusCode::isError, resp -> resp.bodyToMono(String.class).defaultIfEmpty("")
+            .map(body -> new WebClientResponseException(
+                "TMDB trending " + resp.statusCode().value(),
+                resp.statusCode().value(), resp.statusCode().toString(),
+                null, body.getBytes(), null)))
+        .bodyToMono(String.class)
+        .timeout(Duration.ofSeconds(6))
+        .retryWhen(
+            Retry.backoff(2, Duration.ofMillis(250))
+                .filter(ex -> ex instanceof WebClientResponseException wcre && wcre.getStatusCode().is5xxServerError()
+                    || !(ex instanceof WebClientResponseException))
+                .onRetryExhaustedThrow((spec, signal) -> signal.failure()));
   }
 
   public Mono<String> details(long id) {
-    // include richer data so the UI can show more without extra calls
     String q = "append_to_response=videos,credits,images&include_image_language=en,null";
     String uri = "/movie/" + id + "?" + q;
     if (v4Token.isEmpty() && !v3Key.isEmpty()) {
@@ -52,7 +65,17 @@ public class TmdbClient {
     }
     return client.get().uri(uri)
         .retrieve()
-        .onStatus(s -> s.is4xxClientError() || s.is5xxServerError(), resp -> resp.createException())
-        .bodyToMono(String.class);
+        .onStatus(HttpStatusCode::isError, resp -> resp.bodyToMono(String.class).defaultIfEmpty("")
+            .map(body -> new WebClientResponseException(
+                "TMDB details " + resp.statusCode().value(),
+                resp.statusCode().value(), resp.statusCode().toString(),
+                null, body.getBytes(), null)))
+        .bodyToMono(String.class)
+        .timeout(Duration.ofSeconds(6))
+        .retryWhen(
+            Retry.backoff(2, Duration.ofMillis(250))
+                .filter(ex -> ex instanceof WebClientResponseException wcre && wcre.getStatusCode().is5xxServerError()
+                    || !(ex instanceof WebClientResponseException))
+                .onRetryExhaustedThrow((spec, signal) -> signal.failure()));
   }
 }

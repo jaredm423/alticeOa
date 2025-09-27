@@ -1,0 +1,214 @@
+.page {
+    display: block;
+}
+
+.hero {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 16 / 9;
+    width: 100%;
+    min-height: 28dvh;
+    max-height: 65dvh;
+    background: var(--bg);
+    margin-inline: auto;
+}
+
+.backdrop {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-position: 50% 10%;
+    object-fit: cover;
+    display: block;
+    filter: saturate(1.05) contrast(1.05);
+    z-index: 0;
+}
+
+.heroOverlay {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background:
+        /* side vignette */
+        linear-gradient(to right,
+            rgba(0, 0, 0, .35), rgba(0, 0, 0, 0) 18%,
+            rgba(0, 0, 0, 0) 82%, rgba(0, 0, 0, .35)),
+        /* bottom fade into page bg */
+        linear-gradient(to bottom,
+            rgba(0, 0, 0, .18) 0%, rgba(0, 0, 0, .55) 60%, var(--bg) 100%);
+}
+
+.heroContent {
+    position: relative;
+    width: 100%;
+    z-index: 2;
+    display: grid;
+    gap: 16px;
+    padding-top: 16px;
+    padding-bottom: 24px;
+    margin-inline: auto;
+}
+
+
+.topRow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.backLink {
+    color: var(--text);
+    text-decoration: none;
+    opacity: .85;
+}
+
+.backLink:hover {
+    text-decoration: underline;
+}
+
+.actions {
+    margin-left: auto;
+}
+
+.headerRow {
+    align-items: start;
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: 20px;
+    align-items: end;
+    z-index: 1;
+}
+
+.posterWrap {
+    width: 180px;
+    aspect-ratio: 2/3;
+    border-radius: var(--r-lg);
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, .08);
+    box-shadow: var(--shadow-1);
+    background: var(--bg-elev);
+}
+
+.poster {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.meta {
+    display: grid;
+    gap: 8px;
+    color: var(--text);
+}
+
+.title {
+    font-size: clamp(1.4rem, 2.8vw, 2.2rem);
+    font-weight: 800;
+    letter-spacing: .2px;
+}
+
+.sub {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    color: var(--muted);
+    font-size: var(--fs-sm);
+}
+
+.badge {
+    margin-left: auto;
+    background: rgba(124, 58, 237, .2);
+    color: #e9d5ff;
+    border: 1px solid rgba(124, 58, 237, .4);
+    border-radius: 999px;
+    padding: .1rem .6rem;
+}
+
+.tagline {
+    color: var(--muted);
+    font-style: italic;
+}
+
+.section {
+    margin: 20px 0 28px;
+}
+
+.h2 {
+    font-size: var(--fs-lg);
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.overview {
+    line-height: 1.7;
+    color: var(--text);
+    opacity: .92;
+}
+
+.dl {
+    display: grid;
+    gap: 10px;
+}
+
+.dl>div {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    gap: 8px;
+}
+
+.dl dt {
+    color: var(--muted);
+}
+
+.dl dd {
+    color: var(--text);
+    margin: 0;
+}
+
+@media (max-width: 800px) {
+    .headerRow {
+        grid-template-columns: 120px 1fr;
+        gap: 14px;
+    }
+
+    .posterWrap {
+        width: 120px;
+    }
+}
+
+.backdropSkel {
+    width: 100%;
+    height: 46vh;
+}
+
+.posterSkel {
+    width: 100%;
+    height: 100%;
+}
+
+.titleSkel {
+    width: min(60ch, 80%);
+    height: 28px;
+    border-radius: 8px;
+}
+
+.subSkel {
+    width: min(45ch, 60%);
+    height: 18px;
+    border-radius: 8px;
+}
+
+.taglineSkel {
+    width: min(50ch, 70%);
+    height: 16px;
+    border-radius: 8px;
+}
+
+.paraSkel {
+    width: 100%;
+    height: 16px;
+    border-radius: 8px;
+    margin: 10px 0;
+}
